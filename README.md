@@ -10,12 +10,12 @@ Use PanGesture to dismiss view on UIViewController and UIView.
 ## PanSlip to UIViewController
 left to right | right to left | top to bottom | bottom to top
 --- | :---: | --- | :---:
-<img src="https://user-images.githubusercontent.com/15151687/59284589-74e36f00-8ca7-11e9-99a9-62f7ff09176a.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284597-76ad3280-8ca7-11e9-8899-60dcd266c99e.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284604-790f8c80-8ca7-11e9-8b5b-514e5d2f69b3.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284614-7d3baa00-8ca7-11e9-8b6c-fa581be6aca8.gif" width="155" height="330">
+<img src="https://user-images.githubusercontent.com/15151687/59292203-8df41c00-8cb7-11e9-82ba-2a8dd3116c24.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292205-8fbddf80-8cb7-11e9-8f5d-27580041a429.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292211-9187a300-8cb7-11e9-83e2-2f51b519cbb5.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292214-93e9fd00-8cb7-11e9-9378-2cbe460de4d7.gif" width="155" height="330">
 
 ## PanSlip to UIView
 left to right | right to left | top to bottom | bottom to top
 --- | :---: | --- | :---:
-<img src="https://user-images.githubusercontent.com/15151687/59284636-86c51200-8ca7-11e9-9099-2ee9f4db7e30.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284638-888ed580-8ca7-11e9-86da-fa7e0cf07d10.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284652-90e71080-8ca7-11e9-8a26-d6c47f49381e.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59284655-93496a80-8ca7-11e9-9da6-40e6e85d5d82.gif" width="155" height="330">
+<img src="https://user-images.githubusercontent.com/15151687/59292218-977d8400-8cb7-11e9-807f-5d5d096be483.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292220-9a787480-8cb7-11e9-9bd4-27a18d555b60.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292224-9cdace80-8cb7-11e9-8bc1-8401d9b794eb.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292228-a06e5580-8cb7-11e9-9b4e-8262ac573ac0.gif" width="155" height="330">
 
 ## Usage
 
