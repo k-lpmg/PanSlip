@@ -23,7 +23,7 @@ extension UIView: PanSlip {
         }
     }
     
-    public func enablePanSlip(direction: PanSlipDirection, completion: (() -> Void)?) {
+    public func enablePanSlip(direction: PanSlipDirection, completion: (() -> Void)? = nil) {
         setDismissDirection(with: direction)
         setDismissCompletion(with: completion)
         
