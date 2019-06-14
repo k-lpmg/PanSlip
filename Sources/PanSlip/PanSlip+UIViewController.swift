@@ -24,11 +24,11 @@ extension UIViewController: PanSlip {
     public func enablePanSlip(direction: PanSlipDirection,
                               percentThreshold: CGFloat? = nil,
                               completion: (() -> Void)? = nil) {
-        setDismissDirection(with: direction)
+        setPanSlipDirection(with: direction)
         if let percentThreshold = percentThreshold {
             setPercentThreshold(with: percentThreshold)
         }
-        setDismissCompletion(with: completion)
+        setPanSlipCompletion(with: completion)
         
         transitioningDelegate = self
         interactiveTransition = InteractiveTransition()
@@ -90,7 +90,7 @@ extension UIViewController: PanSlip {
     
     // MARK: - Private methods
     
-    private func setDismissDirection(with direction: PanSlipDirection) {
+    private func setPanSlipDirection(with direction: PanSlipDirection) {
         objc_setAssociatedObject(self, &panSlipDirectionContext, direction, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
     
@@ -98,7 +98,7 @@ extension UIViewController: PanSlip {
         objc_setAssociatedObject(self, &percentThresholdContext, percentThreshold, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
     
-    private func setDismissCompletion(with completion: (() -> Void)?) {
+    private func setPanSlipCompletion(with completion: (() -> Void)?) {
         objc_setAssociatedObject(self, &panSlipCompletionContext, completion, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
     
