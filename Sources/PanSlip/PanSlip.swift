@@ -2,9 +2,12 @@ import UIKit
 
 public protocol PanSlip: class {
     var panSlipDirection: PanSlipDirection? { get }
+    var percentThreshold: CGFloat { get }
     var panSlipCompletion: (() -> Void)? { get }
     
-    func enablePanSlip(direction: PanSlipDirection, completion: (() -> Void)?)
+    func enablePanSlip(direction: PanSlipDirection,
+                       percentThreshold: CGFloat?,
+                       completion: (() -> Void)?)
     func disablePanSlip()
 }
 
@@ -12,6 +15,11 @@ public extension PanSlip {
     var panSlipDirection: PanSlipDirection? {
         get {
             return objc_getAssociatedObject(self, &panSlipDirectionContext, defaultValue: nil)
+        }
+    }
+    var percentThreshold: CGFloat {
+        get {
+            return objc_getAssociatedObject(self, &percentThresholdContext, defaultValue: 0.3)
         }
     }
     var panSlipCompletion: (() -> Void)? {

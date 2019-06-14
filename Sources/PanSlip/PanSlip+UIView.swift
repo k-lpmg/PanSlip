@@ -23,8 +23,13 @@ extension UIView: PanSlip {
         }
     }
     
-    public func enablePanSlip(direction: PanSlipDirection, completion: (() -> Void)? = nil) {
+    public func enablePanSlip(direction: PanSlipDirection,
+                              percentThreshold: CGFloat? = nil,
+                              completion: (() -> Void)? = nil) {
         setDismissDirection(with: direction)
+        if let percentThreshold = percentThreshold {
+            setPercentThreshold(with: percentThreshold)
+        }
         setDismissCompletion(with: completion)
         
         guard panGesture == nil else {return}
@@ -83,7 +88,6 @@ extension UIView: PanSlip {
         guard let movement = movementPercent else {return}
         let downwardMovementPercent = fminf(fmaxf(Float(movement), 0.0), 1.0)
         let progress = CGFloat(fminf(downwardMovementPercent, 1.0))
-        let percentThreshold: CGFloat = 0.3
         switch sender.state {
         case .changed:
             guard progress > 0 else {return}
@@ -111,6 +115,10 @@ extension UIView: PanSlip {
     
     private func setDismissDirection(with direction: PanSlipDirection) {
         objc_setAssociatedObject(self, &panSlipDirectionContext, direction, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+    
+    private func setPercentThreshold(with percentThreshold: CGFloat) {
+        objc_setAssociatedObject(self, &percentThresholdContext, percentThreshold, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
     
     private func setDismissCompletion(with completion: (() -> Void)?) {
