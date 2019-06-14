@@ -1,5 +1,5 @@
 # PanSlip
-![Swift](https://img.shields.io/badge/Swift-4.2-orange.svg)
+![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)
 [![Cocoapods](https://img.shields.io/cocoapods/v/PanSlip.svg?style=flat)](https://cocoapods.org/pods/PanSlip)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 ![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
