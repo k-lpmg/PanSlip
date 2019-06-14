@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  PanSlipExample
+//  Example
 //
 //  Created by DongHeeKang on 12/06/2019.
 //  Copyright © 2019 k-lpmg. All rights reserved.
