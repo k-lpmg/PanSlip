@@ -1,4 +1,5 @@
 # PanSlip
+[![Build Status](https://travis-ci.org/k-lpmg/PanSlip.svg?branch=master)](https://travis-ci.org/k-lpmg/PanSlip)
 ![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)
 [![Cocoapods](https://img.shields.io/cocoapods/v/PanSlip.svg?style=flat)](https://cocoapods.org/pods/PanSlip)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
