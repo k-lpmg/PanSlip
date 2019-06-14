@@ -11,6 +11,7 @@
 		650BB06522B38B4400E42FF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 650BB06122B38B4400E42FF6 /* Assets.xcassets */; };
 		650BB06622B38B4400E42FF6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 650BB06222B38B4400E42FF6 /* LaunchScreen.storyboard */; };
 		650BB06722B38B4400E42FF6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650BB06422B38B4400E42FF6 /* MainViewController.swift */; };
+		650BB06922B38E0300E42FF6 /* PanSlip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D16B0A22B00FA100E6B2A4 /* PanSlip.framework */; };
 		65D16B0F22B00FA100E6B2A4 /* PanSlip.h in Headers */ = {isa = PBXBuildFile; fileRef = 65D16B0D22B00FA100E6B2A4 /* PanSlip.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65D16B1E22B00FF800E6B2A4 /* InteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1622B00FF800E6B2A4 /* InteractiveTransition.swift */; };
 		65D16B1F22B00FF800E6B2A4 /* AssociatedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1722B00FF800E6B2A4 /* AssociatedObjectContext.swift */; };
@@ -47,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				650BB06922B38E0300E42FF6 /* PanSlip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +82,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		650BB06822B38E0300E42FF6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		65D16B0022B00FA100E6B2A4 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +97,7 @@
 				65D16B0C22B00FA100E6B2A4 /* Sources */,
 				650BB04F22B38B0500E42FF6 /* Example */,
 				65D16B0B22B00FA100E6B2A4 /* Products */,
+				650BB06822B38E0300E42FF6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
