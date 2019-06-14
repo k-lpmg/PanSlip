@@ -24,13 +24,13 @@ left to right | right to left | top to bottom | bottom to top
 ```swift
 // UIViewController
 let viewController = UIViewController()
-viewController.enablePanSlip(direction: .topToBottom) {
+viewController.enablePanSlip(direction: .topToBottom, percentThreshold: 0.2) {
     // TODO completion when UIViewController dismissed
 }
 
 // UIView
 let view = UIView()
-view.enablePanSlip(direction: .topToBottom) {
+view.enablePanSlip(direction: .topToBottom, percentThreshold: 0.2) {
     // TODO completion when UIView dismissed
 }
 ```
