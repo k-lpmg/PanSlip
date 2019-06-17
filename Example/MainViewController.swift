@@ -94,8 +94,8 @@ final class MainViewController: UIViewController {
         let targetViewController = UIViewController()
         targetViewController.view.backgroundColor = .blue
         
-        targetViewController.enablePanSlip(direction: direction, percentThreshold: 0.7) {
-            print("PanSlip UIView completion")
+        targetViewController.enablePanSlip(direction: direction, percentThreshold: 0.2) {
+            print("PanSlip to UIViewController completed")
         }
         
         present(targetViewController, animated: true)
@@ -106,8 +106,8 @@ final class MainViewController: UIViewController {
         targetView.frame = view.frame
         targetView.backgroundColor = .purple
         
-        targetView.enablePanSlip(direction: direction, percentThreshold: 0.7) {
-            print("PanSlip UIView completion")
+        targetView.enablePanSlip(direction: direction, percentThreshold: 0.2) {
+            print("PanSlip to UIView completed")
         }
         
         view.addSubview(targetView)
