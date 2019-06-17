@@ -50,19 +50,19 @@ extension UIView: PanSlip {
         guard let dismissDirection = panSlipDirection else {return}
         switch dismissDirection {
         case .leftToRight:
-            frame.origin.x = bounds.width
+            self.transform = CGAffineTransform(translationX: bounds.width, y: 0)
         case .righTotLeft:
-            frame.origin.x = -bounds.width
+            self.transform = CGAffineTransform(translationX: -bounds.width, y: 0)
         case .topToBottom:
-            frame.origin.y = bounds.height
+            self.transform = CGAffineTransform(translationX: 0, y: bounds.height)
         case .bottomToTop:
-            frame.origin.y = -bounds.height
+            self.transform = CGAffineTransform(translationX: 0, y: -bounds.height)
         }
     }
     
     private func rollback(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
         UIView.animate(withDuration: duration, animations: {
-            self.frame.origin = CGPoint.zero
+            self.transform = CGAffineTransform.identity
             self.layoutIfNeeded()
         })
     }
@@ -93,9 +93,9 @@ extension UIView: PanSlip {
             guard progress > 0 else {return}
             switch dismissDirection {
             case .leftToRight, .righTotLeft:
-                frame.origin.x = translation.x
+                self.transform = CGAffineTransform(translationX: translation.x, y: self.frame.origin.y)
             case .topToBottom, .bottomToTop:
-                frame.origin.y = translation.y
+                self.transform = CGAffineTransform(translationX: self.frame.origin.x, y: translation.y)
             }
         case .cancelled:
             rollback()
