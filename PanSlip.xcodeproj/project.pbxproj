@@ -18,7 +18,7 @@
 		65D16B2022B00FF800E6B2A4 /* PanSlip+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1822B00FF800E6B2A4 /* PanSlip+UIViewController.swift */; };
 		65D16B2122B00FF800E6B2A4 /* PanSlip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1922B00FF800E6B2A4 /* PanSlip.swift */; };
 		65D16B2222B00FF800E6B2A4 /* PanSlipDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1A22B00FF800E6B2A4 /* PanSlipDirection.swift */; };
-		65D16B2322B00FF800E6B2A4 /* ObjcRuntime-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1B22B00FF800E6B2A4 /* ObjcRuntime-Extensions.swift */; };
+		65D16B2322B00FF800E6B2A4 /* ObjcRuntime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1B22B00FF800E6B2A4 /* ObjcRuntime+Extensions.swift */; };
 		65D16B2422B00FF800E6B2A4 /* PanSlip+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1C22B00FF800E6B2A4 /* PanSlip+UIView.swift */; };
 		65D16B2522B00FF800E6B2A4 /* PanSlipAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D16B1D22B00FF800E6B2A4 /* PanSlipAnimator.swift */; };
 /* End PBXBuildFile section */
@@ -38,7 +38,7 @@
 		65D16B1822B00FF800E6B2A4 /* PanSlip+UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PanSlip+UIViewController.swift"; sourceTree = "<group>"; };
 		65D16B1922B00FF800E6B2A4 /* PanSlip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanSlip.swift; sourceTree = "<group>"; };
 		65D16B1A22B00FF800E6B2A4 /* PanSlipDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanSlipDirection.swift; sourceTree = "<group>"; };
-		65D16B1B22B00FF800E6B2A4 /* ObjcRuntime-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObjcRuntime-Extensions.swift"; sourceTree = "<group>"; };
+		65D16B1B22B00FF800E6B2A4 /* ObjcRuntime+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObjcRuntime+Extensions.swift"; sourceTree = "<group>"; };
 		65D16B1C22B00FF800E6B2A4 /* PanSlip+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PanSlip+UIView.swift"; sourceTree = "<group>"; };
 		65D16B1D22B00FF800E6B2A4 /* PanSlipAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanSlipAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,7 +123,7 @@
 			children = (
 				65D16B1722B00FF800E6B2A4 /* AssociatedObjectContext.swift */,
 				65D16B1622B00FF800E6B2A4 /* InteractiveTransition.swift */,
-				65D16B1B22B00FF800E6B2A4 /* ObjcRuntime-Extensions.swift */,
+				65D16B1B22B00FF800E6B2A4 /* ObjcRuntime+Extensions.swift */,
 				65D16B1922B00FF800E6B2A4 /* PanSlip.swift */,
 				65D16B1C22B00FF800E6B2A4 /* PanSlip+UIView.swift */,
 				65D16B1822B00FF800E6B2A4 /* PanSlip+UIViewController.swift */,
@@ -255,7 +255,7 @@
 				65D16B2422B00FF800E6B2A4 /* PanSlip+UIView.swift in Sources */,
 				65D16B1F22B00FF800E6B2A4 /* AssociatedObjectContext.swift in Sources */,
 				65D16B2022B00FF800E6B2A4 /* PanSlip+UIViewController.swift in Sources */,
-				65D16B2322B00FF800E6B2A4 /* ObjcRuntime-Extensions.swift in Sources */,
+				65D16B2322B00FF800E6B2A4 /* ObjcRuntime+Extensions.swift in Sources */,
 				65D16B2222B00FF800E6B2A4 /* PanSlipDirection.swift in Sources */,
 				65D16B2122B00FF800E6B2A4 /* PanSlip.swift in Sources */,
 				65D16B1E22B00FF800E6B2A4 /* InteractiveTransition.swift in Sources */,
