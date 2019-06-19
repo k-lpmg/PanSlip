@@ -91,7 +91,7 @@ private class PanSlipViewProxy: NSObject {
         view.removeGestureRecognizer(panGesture)
     }
     
-    private func slip(animated: Bool, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    private func slip(animated: Bool, completion: (() -> Void)? = nil) {
         func slipUsingDirection() {
             guard let slipDirection = slipDirection else {return}
             
@@ -119,7 +119,8 @@ private class PanSlipViewProxy: NSObject {
             return
         }
         
-        UIView.animate(withDuration: duration, animations: {
+        let slipDuration: TimeInterval = 0.3
+        UIView.animate(withDuration: slipDuration, animations: {
             slipUsingDirection()
         }) { (isFinished) in
             guard isFinished else {return}
@@ -132,8 +133,9 @@ private class PanSlipViewProxy: NSObject {
         }
     }
     
-    private func rollback(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
-        UIView.animate(withDuration: duration, animations: {
+    private func rollback(completion: (() -> Void)? = nil) {
+        let rollbackDuration: TimeInterval = 0.3
+        UIView.animate(withDuration: rollbackDuration, animations: {
             self.view.transform = CGAffineTransform.identity
             self.view.layoutIfNeeded()
         })

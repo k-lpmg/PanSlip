@@ -9,12 +9,3 @@ extension PanSlipBehavior {
         return nil
     }
 }
-
-extension PanSlipBehavior where Self: UIView {
-    var slipDuration: TimeInterval? {
-        return nil
-    }
-    var rollbackDuration: TimeInterval? {
-        return nil
-    }
-}
