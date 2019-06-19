@@ -50,14 +50,14 @@ view.ps.disable()
 ```swift
 // UIViewController
 extension UIViewController: PanSlipBehavior {
-    var percentThreshold: CGFloat? {
+    public var percentThreshold: CGFloat? {
         return 0.2
     }
 }
 
 // UIView
 extension UIView: PanSlipBehavior {
-    var percentThreshold: CGFloat? {
+    public var percentThreshold: CGFloat? {
         return 0.2
     }
 }
