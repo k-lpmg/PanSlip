@@ -50,6 +50,8 @@ extension PanSlip where Base: UIView {
     }
     
     public func disable() {
+        slipDirection = nil
+        slipCompletion = nil
         viewProxy = nil
     }
     
