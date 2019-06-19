@@ -121,9 +121,9 @@
 		65D16B1522B00FF800E6B2A4 /* PanSlip */ = {
 			isa = PBXGroup;
 			children = (
+				65D16B1B22B00FF800E6B2A4 /* AssociatedObject+Extensions.swift */,
 				65D16B1722B00FF800E6B2A4 /* AssociatedObjectContext.swift */,
 				65D16B1622B00FF800E6B2A4 /* InteractiveTransition.swift */,
-				65D16B1B22B00FF800E6B2A4 /* AssociatedObject+Extensions.swift */,
 				65D16B1922B00FF800E6B2A4 /* PanSlip.swift */,
 				65D16B1C22B00FF800E6B2A4 /* PanSlip+UIView.swift */,
 				65D16B1822B00FF800E6B2A4 /* PanSlip+UIViewController.swift */,
