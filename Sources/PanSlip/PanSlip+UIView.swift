@@ -1,88 +1,163 @@
 import UIKit
 
-extension UIView: PanSlip {
+private var slipDirectionContext: UInt8 = 0
+private var slipCompletionContext: UInt8 = 0
+
+private var panSlipViewProxyContext: UInt8 = 0
+
+extension PanSlip where Base: UIView {
+    
+    // MARK: - Properties
+    
+    private(set) var slipDirection: PanSlipDirection? {
+        get {
+            return objc_getAssociatedObject(base, &slipDirectionContext, defaultValue: nil)
+        }
+        set {
+            objc_setAssociatedObject(base, &slipDirectionContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    private(set) var slipCompletion: (() -> Void)? {
+        get {
+            return objc_getAssociatedObject(base, &slipCompletionContext, defaultValue: nil)
+        }
+        set {
+            objc_setAssociatedObject(base, &slipCompletionContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    private var viewProxy: PanSlipViewProxy? {
+        get {
+            return objc_getAssociatedObject(base, &panSlipViewProxyContext, defaultValue: nil)
+        }
+        set {
+            objc_setAssociatedObject(base, &panSlipViewProxyContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
     
     // MARK: - Public methods
     
-    public func slip(animated: Bool, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
-        guard animated else {
-            self.removeFromSuperview()
-            self.panSlipCompletion?()
-            completion?()
-            return
-        }
+    public func enable(slipDirection: PanSlipDirection, slipCompletion: (() -> Void)?) {
+        self.slipDirection = slipDirection
+        self.slipCompletion = slipCompletion
         
-        UIView.animate(withDuration: duration, animations: {
-            self.dismissUseDirection()
-            self.layoutIfNeeded()
-        }) { (isFinished) in
-            guard isFinished else {return}
-            self.removeFromSuperview()
-            self.panSlipCompletion?()
-            completion?()
+        if viewProxy == nil {
+            viewProxy = PanSlipViewProxy(view: base,
+                                         slipDirection: slipDirection,
+                                         slipCompletion: slipCompletion)
+            viewProxy?.configure()
         }
     }
     
-    public func enablePanSlip(direction: PanSlipDirection,
-                              percentThreshold: CGFloat? = nil,
-                              completion: (() -> Void)? = nil) {
-        setPanSlipDirection(with: direction)
-        if let percentThreshold = percentThreshold {
-            setPercentThreshold(with: percentThreshold)
-        }
-        setPanSlipCompletion(with: completion)
-        
-        guard panGesture == nil else {return}
-        panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
-        addGestureRecognizer(panGesture!)
+    public func disable() {
+        slipDirection = nil
+        slipCompletion = nil
+        viewProxy = nil
     }
     
-    public func disablePanSlip() {
-        if let panGesture = panGesture {
-            removeGestureRecognizer(panGesture)
-        }
-        panGesture = nil
+}
+
+// MARK: - PanSlipViewProxy
+
+private class PanSlipViewProxy: NSObject {
+    
+    // MARK: - Properties
+    
+    private unowned let view: UIView
+    private var slipDirection: PanSlipDirection?
+    private var slipCompletion: (() -> Void)?
+    
+    private lazy var panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
+    
+    // MARK: - Con(De)structor
+    
+    init(view: UIView, slipDirection: PanSlipDirection, slipCompletion: (() -> Void)?) {
+        self.view = view
+        super.init()
+        
+        self.slipDirection = slipDirection
+        self.slipCompletion = slipCompletion
+    }
+    
+    // MARK: - Internal methods
+    
+    func configure() {
+        view.addGestureRecognizer(panGesture)
     }
     
     // MARK: - Private methods
     
-    private func dismissUseDirection() {
-        guard let dismissDirection = panSlipDirection else {return}
-        switch dismissDirection {
-        case .leftToRight:
-            transform = CGAffineTransform(translationX: bounds.width, y: 0)
-        case .righTotLeft:
-            transform = CGAffineTransform(translationX: -bounds.width, y: 0)
-        case .topToBottom:
-            transform = CGAffineTransform(translationX: 0, y: bounds.height)
-        case .bottomToTop:
-            transform = CGAffineTransform(translationX: 0, y: -bounds.height)
+    private func unconfigure() {
+        view.removeGestureRecognizer(panGesture)
+    }
+    
+    private func slip(animated: Bool, completion: (() -> Void)? = nil) {
+        func slipUsingDirection() {
+            guard let slipDirection = slipDirection else {return}
+            
+            defer {
+                view.layoutIfNeeded()
+            }
+            
+            let size = view.bounds
+            switch slipDirection {
+            case .leftToRight:
+                view.transform = CGAffineTransform(translationX: size.width, y: 0)
+            case .righTotLeft:
+                view.transform = CGAffineTransform(translationX: -size.width, y: 0)
+            case .topToBottom:
+                view.transform = CGAffineTransform(translationX: 0, y: size.height)
+            case .bottomToTop:
+                view.transform = CGAffineTransform(translationX: 0, y: -size.height)
+            }
+        }
+        
+        guard animated else {
+            view.removeFromSuperview()
+            slipCompletion?()
+            completion?()
+            return
+        }
+        
+        let slipDuration: TimeInterval = 0.3
+        UIView.animate(withDuration: slipDuration, animations: {
+            slipUsingDirection()
+        }) { (isFinished) in
+            guard isFinished else {return}
+            
+            self.unconfigure()
+            self.view.removeFromSuperview()
+            self.slipCompletion?()
+            
+            completion?()
         }
     }
     
-    private func rollback(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
-        UIView.animate(withDuration: duration, animations: {
-            self.transform = CGAffineTransform.identity
-            self.layoutIfNeeded()
+    private func rollback(completion: (() -> Void)? = nil) {
+        let rollbackDuration: TimeInterval = 0.3
+        UIView.animate(withDuration: rollbackDuration, animations: {
+            self.view.transform = CGAffineTransform.identity
+            self.view.layoutIfNeeded()
         })
     }
     
     // MARK: - Private selector
     
     @objc private func panGesture(_ sender: UIPanGestureRecognizer) {
-        guard let dismissDirection = panSlipDirection else {return}
+        guard let slipDirection = slipDirection else {return}
         
-        let translation = sender.translation(in: self)
+        let translation = sender.translation(in: view)
+        let size = view.bounds.size
         var movementPercent: CGFloat?
-        switch dismissDirection {
+        switch slipDirection {
         case .leftToRight:
-            movementPercent = translation.x / bounds.width
+            movementPercent = translation.x / size.width
         case .righTotLeft:
-            movementPercent = -(translation.x / bounds.width)
+            movementPercent = -(translation.x / size.width)
         case .topToBottom:
-            movementPercent = translation.y / bounds.height
+            movementPercent = translation.y / size.height
         case .bottomToTop:
-            movementPercent = -(translation.y / bounds.height)
+            movementPercent = -(translation.y / size.height)
         }
         
         guard let movement = movementPercent else {return}
@@ -91,15 +166,16 @@ extension UIView: PanSlip {
         switch sender.state {
         case .changed:
             guard progress > 0 else {return}
-            switch dismissDirection {
+            switch slipDirection {
             case .leftToRight, .righTotLeft:
-                transform = CGAffineTransform(translationX: translation.x, y: self.frame.origin.y)
+                view.transform = CGAffineTransform(translationX: translation.x, y: view.frame.origin.y)
             case .topToBottom, .bottomToTop:
-                transform = CGAffineTransform(translationX: self.frame.origin.x, y: translation.y)
+                view.transform = CGAffineTransform(translationX: view.frame.origin.x, y: translation.y)
             }
         case .cancelled:
             rollback()
         case .ended:
+            let percentThreshold: CGFloat = (view as? PanSlipBehavior)?.percentThreshold ?? 0.3
             guard progress > percentThreshold else {
                 rollback()
                 return
@@ -110,19 +186,4 @@ extension UIView: PanSlip {
             break
         }
     }
-    
-    // MARK: - Private methods
-    
-    private func setPanSlipDirection(with direction: PanSlipDirection) {
-        objc_setAssociatedObject(self, &panSlipDirectionContext, direction, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    private func setPercentThreshold(with percentThreshold: CGFloat) {
-        objc_setAssociatedObject(self, &percentThresholdContext, percentThreshold, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    private func setPanSlipCompletion(with completion: (() -> Void)?) {
-        objc_setAssociatedObject(self, &panSlipCompletionContext, completion, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
 }

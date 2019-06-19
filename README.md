@@ -24,13 +24,13 @@ left to right | right to left | top to bottom | bottom to top
 ```swift
 // UIViewController
 let viewController = UIViewController()
-viewController.enablePanSlip(direction: .topToBottom, percentThreshold: 0.2) {
+viewController.ps.enable(slipDirection: direction) {
     // TODO completion when UIViewController dismissed
 }
 
 // UIView
 let view = UIView()
-view.enablePanSlip(direction: .topToBottom, percentThreshold: 0.2) {
+view.ps.enable(slipDirection: direction) {
     // TODO completion when UIView dismissed
 }
 ```
@@ -39,11 +39,28 @@ view.enablePanSlip(direction: .topToBottom, percentThreshold: 0.2) {
 ```swift
 // UIViewController
 let viewController = UIViewController()
-viewController.disablePanSlip()
+viewController.ps.disable()
 
 // UIView
 let view = UIView()
-view.disablePanSlip()
+view.ps.disable()
+```
+
+#### Set percentThreshold
+```swift
+// UIViewController
+extension UIViewController: PanSlipBehavior {
+    var percentThreshold: CGFloat? {
+        return 0.2
+    }
+}
+
+// UIView
+extension UIView: PanSlipBehavior {
+    var percentThreshold: CGFloat? {
+        return 0.2
+    }
+}
 ```
 
 ## Installation

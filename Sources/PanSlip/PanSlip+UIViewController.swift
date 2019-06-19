@@ -1,67 +1,120 @@
 import UIKit
 
-private var interactiveTransitionContext: UInt8 = 0
+private var slipDirectionContext: UInt8 = 0
+private var slipCompletionContext: UInt8 = 0
 
-extension UIViewController: PanSlip {
+private var panSlipViewControllerProxyContext: UInt8 = 0
+
+extension PanSlip where Base: UIViewController {
     
     // MARK: - Properties
     
-    private var interactiveTransition: InteractiveTransition? {
+    private(set) var slipDirection: PanSlipDirection? {
         get {
-            return objc_getAssociatedObject(self, &interactiveTransitionContext, defaultValue: nil)
+            return objc_getAssociatedObject(base, &slipDirectionContext, defaultValue: nil)
         }
         set {
-            objc_setAssociatedObject(self, &interactiveTransitionContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(base, &slipDirectionContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    private(set) var slipCompletion: (() -> Void)? {
+        get {
+            return objc_getAssociatedObject(base, &slipCompletionContext, defaultValue: nil)
+        }
+        set {
+            objc_setAssociatedObject(base, &slipCompletionContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    private var viewControllerProxy: PanSlipViewControllerProxy? {
+        get {
+            return objc_getAssociatedObject(base, &panSlipViewControllerProxyContext, defaultValue: nil)
+        }
+        set {
+            objc_setAssociatedObject(base, &panSlipViewControllerProxyContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
     // MARK: - Public methods
     
+    public func enable(slipDirection: PanSlipDirection, slipCompletion: (() -> Void)?) {
+        self.slipDirection = slipDirection
+        self.slipCompletion = slipCompletion
+        
+        if viewControllerProxy == nil {
+            viewControllerProxy = PanSlipViewControllerProxy(viewController: base,
+                                                             slipDirection: slipDirection,
+                                                             slipCompletion: slipCompletion)
+            viewControllerProxy?.configure()
+        }
+    }
+    
+    public func disable() {
+        slipDirection = nil
+        slipCompletion = nil
+        viewControllerProxy = nil
+    }
+    
     public func slip(animated: Bool, completion: (() -> Void)? = nil) {
-        dismiss(animated: animated, completion: completion)
+        base.dismiss(animated: animated, completion: completion)
     }
     
-    public func enablePanSlip(direction: PanSlipDirection,
-                              percentThreshold: CGFloat? = nil,
-                              completion: (() -> Void)? = nil) {
-        setPanSlipDirection(with: direction)
-        if let percentThreshold = percentThreshold {
-            setPercentThreshold(with: percentThreshold)
-        }
-        setPanSlipCompletion(with: completion)
+}
+
+// MARK: - PanSlipViewControllerProxy
+
+private class PanSlipViewControllerProxy: NSObject {
+    
+    // MARK: - Properties
+    
+    private unowned let viewController: UIViewController
+    private var slipDirection: PanSlipDirection?
+    private var slipCompletion: (() -> Void)?
+    
+    private let interactiveTransition = InteractiveTransition()
+    private lazy var panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
+    
+    // MARK: - Con(De)structor
+    
+    init(viewController: UIViewController, slipDirection: PanSlipDirection, slipCompletion: (() -> Void)?) {
+        self.viewController = viewController
+        super.init()
         
-        transitioningDelegate = self
-        interactiveTransition = InteractiveTransition()
-        
-        panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
-        view.addGestureRecognizer(panGesture!)
+        self.slipDirection = slipDirection
+        self.slipCompletion = slipCompletion
+        viewController.transitioningDelegate = self
     }
     
-    public func disablePanSlip() {
-        transitioningDelegate = nil
-        interactiveTransition = nil
-        if let gestureRecognizer = panGesture {
-            view.removeGestureRecognizer(gestureRecognizer)
-        }
-        panGesture = nil
+    // MARK: - Internal methods
+    
+    func configure() {
+        viewController.view.addGestureRecognizer(panGesture)
+    }
+    
+    // MARK: - Private methods
+    
+    private func unconfigure() {
+        viewController.transitioningDelegate = nil
+        viewController.view.removeGestureRecognizer(panGesture)
     }
     
     // MARK: - Private selector
     
     @objc private func panGesture(_ sender: UIPanGestureRecognizer) {
-        guard let dismissDirection = panSlipDirection, let interactiveTransition = interactiveTransition else { return }
+        guard let slipDirection = slipDirection else { return }
         
-        let translation = sender.translation(in: view)
+        let translation = sender.translation(in: viewController.view)
+        let size = viewController.view.bounds
         var movementPercent: CGFloat?
-        switch dismissDirection {
+        switch slipDirection {
         case .leftToRight:
-            movementPercent = translation.x / view.bounds.width
+            movementPercent = translation.x / size.width
         case .righTotLeft:
-            movementPercent = -(translation.x / view.bounds.width)
+            movementPercent = -(translation.x / size.width)
         case .topToBottom:
-            movementPercent = translation.y / view.bounds.height
+            movementPercent = translation.y / size.height
         case .bottomToTop:
-            movementPercent = -(translation.y / view.bounds.height)
+            movementPercent = -(translation.y / size.height)
         }
         
         guard let movement = movementPercent else {return}
@@ -70,8 +123,9 @@ extension UIViewController: PanSlip {
         switch sender.state {
         case .began:
             interactiveTransition.hasStarted = true
-            dismiss(animated: true, completion: nil)
+            viewController.dismiss(animated: true, completion: nil)
         case .changed:
+            let percentThreshold: CGFloat = (viewController as? PanSlipBehavior)?.percentThreshold ?? 0.3
             interactiveTransition.shouldFinish = progress > percentThreshold
             interactiveTransition.update(progress)
         case .cancelled:
@@ -81,38 +135,25 @@ extension UIViewController: PanSlip {
             interactiveTransition.hasStarted = false
             interactiveTransition.shouldFinish ? interactiveTransition.finish() : interactiveTransition.cancel()
             if interactiveTransition.shouldFinish {
-                panSlipCompletion?()
+                unconfigure()
+                slipCompletion?()
             }
         default:
             break
         }
     }
-    
-    // MARK: - Private methods
-    
-    private func setPanSlipDirection(with direction: PanSlipDirection) {
-        objc_setAssociatedObject(self, &panSlipDirectionContext, direction, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    private func setPercentThreshold(with percentThreshold: CGFloat) {
-        objc_setAssociatedObject(self, &percentThresholdContext, percentThreshold, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    private func setPanSlipCompletion(with completion: (() -> Void)?) {
-        objc_setAssociatedObject(self, &panSlipCompletionContext, completion, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
 }
 
-extension UIViewController: UIViewControllerTransitioningDelegate {
+// MARK: - UIViewControllerTransitioningDelegate
+
+extension PanSlipViewControllerProxy: UIViewControllerTransitioningDelegate {
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        guard let dismissDirection = panSlipDirection, interactiveTransition?.hasStarted == true else {return nil}
-        return PanSlipAnimator(direction: dismissDirection)
+        guard let slipDirection = slipDirection, interactiveTransition.hasStarted == true else {return nil}
+        return PanSlipAnimator(direction: slipDirection)
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let interactiveTransition = interactiveTransition else {return nil}
         return interactiveTransition.hasStarted ? interactiveTransition : nil
     }
     
