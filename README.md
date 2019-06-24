@@ -24,13 +24,13 @@ left to right | right to left | top to bottom | bottom to top
 ```swift
 // UIViewController
 let viewController = UIViewController()
-viewController.ps.enable(slipDirection: direction) {
+viewController.ps.enable(slipDirection: .topToBottom) {
     // TODO completion when UIViewController dismissed
 }
 
 // UIView
 let view = UIView()
-view.ps.enable(slipDirection: direction) {
+view.ps.enable(slipDirection: .topToBottom) {
     // TODO completion when UIView dismissed
 }
 ```
