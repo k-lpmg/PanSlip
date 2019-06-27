@@ -46,6 +46,17 @@ let view = UIView()
 view.ps.disable()
 ```
 
+#### Manual slip
+```swift
+// UIViewController
+let viewController = UIViewController()
+viewController.ps.slip(animated: true)
+
+// UIView
+let view = UIView()
+view.ps.slip(animated: true)
+```
+
 #### Set percentThreshold
 ```swift
 // UIViewController
