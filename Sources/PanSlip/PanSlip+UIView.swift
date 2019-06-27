@@ -52,6 +52,8 @@ extension PanSlip where Base: UIView {
     public func disable() {
         slipDirection = nil
         slipCompletion = nil
+        
+        viewProxy?.unconfigure()
         viewProxy = nil
     }
     
@@ -87,7 +89,6 @@ extension PanSlip where Base: UIView {
         }) { (isFinished) in
             guard isFinished else {return}
             
-            self.viewProxy?.unconfigure()
             self.base.removeFromSuperview()
             self.slipCompletion?()
         }
