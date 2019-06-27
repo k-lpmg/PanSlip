@@ -52,11 +52,22 @@ extension PanSlip where Base: UIViewController {
     public func disable() {
         slipDirection = nil
         slipCompletion = nil
+        
         viewControllerProxy = nil
     }
     
-    public func slip(animated: Bool, completion: (() -> Void)? = nil) {
-        base.dismiss(animated: animated, completion: completion)
+    public func slip(animated: Bool) {
+        defer {
+            viewControllerProxy?.unconfigure()
+            slipCompletion?()
+        }
+        
+        viewControllerProxy?.interactiveTransition.hasStarted = true
+        base.dismiss(animated: true, completion: nil)
+        
+        viewControllerProxy?.interactiveTransition.shouldFinish = true
+        viewControllerProxy?.interactiveTransition.hasStarted = false
+        viewControllerProxy?.interactiveTransition.finish()
     }
     
 }
@@ -67,11 +78,12 @@ private class PanSlipViewControllerProxy: NSObject {
     
     // MARK: - Properties
     
+    let interactiveTransition = InteractiveTransition()
+    
     private unowned let viewController: UIViewController
     private var slipDirection: PanSlipDirection?
     private var slipCompletion: (() -> Void)?
     
-    private let interactiveTransition = InteractiveTransition()
     private lazy var panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
     
     // MARK: - Con(De)structor
@@ -91,9 +103,7 @@ private class PanSlipViewControllerProxy: NSObject {
         viewController.view.addGestureRecognizer(panGesture)
     }
     
-    // MARK: - Private methods
-    
-    private func unconfigure() {
+    func unconfigure() {
         viewController.transitioningDelegate = nil
         viewController.view.removeGestureRecognizer(panGesture)
     }
@@ -142,6 +152,7 @@ private class PanSlipViewControllerProxy: NSObject {
             break
         }
     }
+    
 }
 
 // MARK: - UIViewControllerTransitioningDelegate
