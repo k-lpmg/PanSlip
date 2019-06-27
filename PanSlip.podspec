@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PanSlip"
-  s.version      = "1.3.2"
+  s.version      = "1.3.3"
   s.summary      = "Use PanGesture to dismiss view on UIViewController and UIView."
   s.homepage     = "https://github.com/k-lpmg/PanSlip"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
