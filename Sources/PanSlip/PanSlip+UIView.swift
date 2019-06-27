@@ -37,7 +37,7 @@ extension PanSlip where Base: UIView {
     
     // MARK: - Public methods
     
-    public func enable(slipDirection: PanSlipDirection, slipCompletion: (() -> Void)?) {
+    public func enable(slipDirection: PanSlipDirection, slipCompletion: (() -> Void)? = nil) {
         self.slipDirection = slipDirection
         self.slipCompletion = slipCompletion
         
