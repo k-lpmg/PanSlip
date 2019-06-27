@@ -55,6 +55,48 @@ extension PanSlip where Base: UIView {
         viewProxy = nil
     }
     
+    public func slip(animated: Bool, completion: (() -> Void)? = nil) {
+        func slipUsingDirection() {
+            guard let slipDirection = slipDirection else {return}
+            
+            defer {
+                base.layoutIfNeeded()
+            }
+            
+            let size = base.bounds
+            switch slipDirection {
+            case .leftToRight:
+                base.transform = CGAffineTransform(translationX: size.width, y: 0)
+            case .righTotLeft:
+                base.transform = CGAffineTransform(translationX: -size.width, y: 0)
+            case .topToBottom:
+                base.transform = CGAffineTransform(translationX: 0, y: size.height)
+            case .bottomToTop:
+                base.transform = CGAffineTransform(translationX: 0, y: -size.height)
+            }
+        }
+        
+        guard animated else {
+            base.removeFromSuperview()
+            slipCompletion?()
+            completion?()
+            return
+        }
+        
+        let slipDuration: TimeInterval = 0.3
+        UIView.animate(withDuration: slipDuration, animations: {
+            slipUsingDirection()
+        }) { (isFinished) in
+            guard isFinished else {return}
+            
+            self.viewProxy?.unconfigure()
+            self.base.removeFromSuperview()
+            self.slipCompletion?()
+            
+            completion?()
+        }
+    }
+    
 }
 
 // MARK: - PanSlipViewProxy
@@ -85,53 +127,11 @@ private class PanSlipViewProxy: NSObject {
         view.addGestureRecognizer(panGesture)
     }
     
-    // MARK: - Private methods
-    
-    private func unconfigure() {
+    func unconfigure() {
         view.removeGestureRecognizer(panGesture)
     }
     
-    private func slip(animated: Bool, completion: (() -> Void)? = nil) {
-        func slipUsingDirection() {
-            guard let slipDirection = slipDirection else {return}
-            
-            defer {
-                view.layoutIfNeeded()
-            }
-            
-            let size = view.bounds
-            switch slipDirection {
-            case .leftToRight:
-                view.transform = CGAffineTransform(translationX: size.width, y: 0)
-            case .righTotLeft:
-                view.transform = CGAffineTransform(translationX: -size.width, y: 0)
-            case .topToBottom:
-                view.transform = CGAffineTransform(translationX: 0, y: size.height)
-            case .bottomToTop:
-                view.transform = CGAffineTransform(translationX: 0, y: -size.height)
-            }
-        }
-        
-        guard animated else {
-            view.removeFromSuperview()
-            slipCompletion?()
-            completion?()
-            return
-        }
-        
-        let slipDuration: TimeInterval = 0.3
-        UIView.animate(withDuration: slipDuration, animations: {
-            slipUsingDirection()
-        }) { (isFinished) in
-            guard isFinished else {return}
-            
-            self.unconfigure()
-            self.view.removeFromSuperview()
-            self.slipCompletion?()
-            
-            completion?()
-        }
-    }
+    // MARK: - Private methods
     
     private func rollback(completion: (() -> Void)? = nil) {
         let rollbackDuration: TimeInterval = 0.3
@@ -181,7 +181,7 @@ private class PanSlipViewProxy: NSObject {
                 return
             }
             
-            slip(animated: true)
+            view.ps.slip(animated: true)
         default:
             break
         }
