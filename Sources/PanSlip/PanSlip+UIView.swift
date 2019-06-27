@@ -63,7 +63,6 @@ extension PanSlip where Base: UIView {
                 base.layoutIfNeeded()
             }
             
-            let size = base.bounds
             switch slipDirection {
             case .leftToRight:
                 base.frame.origin.x = base.bounds.width
