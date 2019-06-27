@@ -55,7 +55,7 @@ extension PanSlip where Base: UIView {
         viewProxy = nil
     }
     
-    public func slip(animated: Bool, completion: (() -> Void)? = nil) {
+    public func slip(animated: Bool) {
         func slipUsingDirection() {
             guard let slipDirection = slipDirection else {return}
             
@@ -79,7 +79,6 @@ extension PanSlip where Base: UIView {
         guard animated else {
             base.removeFromSuperview()
             slipCompletion?()
-            completion?()
             return
         }
         
@@ -92,8 +91,6 @@ extension PanSlip where Base: UIView {
             self.viewProxy?.unconfigure()
             self.base.removeFromSuperview()
             self.slipCompletion?()
-            
-            completion?()
         }
     }
     
