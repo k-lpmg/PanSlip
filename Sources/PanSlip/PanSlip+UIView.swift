@@ -66,13 +66,13 @@ extension PanSlip where Base: UIView {
             let size = base.bounds
             switch slipDirection {
             case .leftToRight:
-                base.transform = CGAffineTransform(translationX: size.width, y: 0)
+                base.frame.origin.x = base.bounds.width
             case .righTotLeft:
-                base.transform = CGAffineTransform(translationX: -size.width, y: 0)
+                base.frame.origin.x = -base.bounds.width
             case .topToBottom:
-                base.transform = CGAffineTransform(translationX: 0, y: size.height)
+                base.frame.origin.y = base.bounds.height
             case .bottomToTop:
-                base.transform = CGAffineTransform(translationX: 0, y: -size.height)
+                base.frame.origin.y = -base.bounds.height
             }
         }
         
@@ -133,7 +133,7 @@ private class PanSlipViewProxy: NSObject {
     private func rollback(completion: (() -> Void)? = nil) {
         let rollbackDuration: TimeInterval = 0.3
         UIView.animate(withDuration: rollbackDuration, animations: {
-            self.view.transform = CGAffineTransform.identity
+            self.view.frame.origin = .zero
             self.view.layoutIfNeeded()
         })
     }
@@ -165,9 +165,9 @@ private class PanSlipViewProxy: NSObject {
             guard progress > 0 else {return}
             switch slipDirection {
             case .leftToRight, .righTotLeft:
-                view.transform = CGAffineTransform(translationX: translation.x, y: view.frame.origin.y)
+                view.frame.origin.x = translation.x
             case .topToBottom, .bottomToTop:
-                view.transform = CGAffineTransform(translationX: view.frame.origin.x, y: translation.y)
+                view.frame.origin.y = translation.y
             }
         case .cancelled:
             rollback()
