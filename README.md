@@ -8,12 +8,14 @@
 
 Use PanGesture to dismiss view on UIViewController and UIView.
 
-## PanSlip to UIViewController
+## Introduction
+
+### PanSlip to UIViewController
 left to right | right to left | top to bottom | bottom to top
 --- | :---: | --- | :---:
 <img src="https://user-images.githubusercontent.com/15151687/59292203-8df41c00-8cb7-11e9-82ba-2a8dd3116c24.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292205-8fbddf80-8cb7-11e9-8f5d-27580041a429.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292211-9187a300-8cb7-11e9-83e2-2f51b519cbb5.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292214-93e9fd00-8cb7-11e9-9378-2cbe460de4d7.gif" width="155" height="330">
 
-## PanSlip to UIView
+### PanSlip to UIView
 left to right | right to left | top to bottom | bottom to top
 --- | :---: | --- | :---:
 <img src="https://user-images.githubusercontent.com/15151687/59292218-977d8400-8cb7-11e9-807f-5d5d096be483.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292220-9a787480-8cb7-11e9-9bd4-27a18d555b60.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292224-9cdace80-8cb7-11e9-8bc1-8401d9b794eb.gif" width="155" height="330"> | <img src="https://user-images.githubusercontent.com/15151687/59292228-a06e5580-8cb7-11e9-9b4e-8262ac573ac0.gif" width="155" height="330">
